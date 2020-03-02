@@ -2,18 +2,19 @@ package com.spring.hibernate.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.hibernate.daoimpl.ProdaoImpl;
 import com.spring.hibernate.model.Product;
+import com.spring.hibernate.repository.ProductRepository;
 
 @Service
 public class ProductService {
 	@Autowired
 	ProdaoImpl productdao;
+	
 	public Product addProduct(Product product) {
 		Product id = productdao.save(product);
 		return id;
@@ -35,5 +36,18 @@ public class ProductService {
 		String list = productdao.deleteProduct(id);
 		return list;
 	}
+	/*
+	 * Get md5 from mysql
+	 */
+	public String getToken() {
+		
+		String token = productdao.getToken();
+		return token;
+	}
+	
+	
 	
 }
+
+
+

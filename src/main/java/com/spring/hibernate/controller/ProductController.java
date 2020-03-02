@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.hibernate.model.Product;
+import com.spring.hibernate.service.ProductRepoService;
 import com.spring.hibernate.service.ProductService;
 
 @RestController
 public class ProductController {
 	@Autowired
 	ProductService productservice;
-
+	@Autowired 
+	ProductRepoService reposervice;
 	@GetMapping("/")
 	public Product home() {
 		Product id = null;
@@ -71,5 +73,25 @@ public class ProductController {
 		return result;
 	}
 	
+	@GetMapping("/md5")
+	public String getTokenValue() {
+		String result="";
+		try {
+			result = productservice.getToken();
+		} catch (NullPointerException ex) {
+			System.out.print(ex);
+		}
+		return result;
+	}
 	
+	@GetMapping("/getByRepo")
+	public List getProductList() {
+		List<Product> result=null;
+		try {
+			result = reposervice.getList();
+		} catch (NullPointerException ex) {
+			System.out.print(ex);
+		}
+		return result;
+	}
 }

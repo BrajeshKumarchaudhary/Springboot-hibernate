@@ -3,6 +3,7 @@ package com.spring.hibernate.daoimpl;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,6 +62,20 @@ public class ProdaoImpl implements ProductDao {
 		}
 		return result;
 		
+	}
+	public String getToken()
+	{
+		Session session = this.sessionfactory.getCurrentSession();
+		String m5="";
+		java.util.List result =session.getNamedQuery("{MyDb.getMd5(pass,email)}")
+				.setParameter("pass", "xyz")
+				 .setParameter("email", "xyz")
+			    .list(); // named parameters are better
+		
+		for(int i=0; i<result.size(); i++){
+			m5 =result.get(i).toString();
+		}
+		return m5;
 	}
 
 }

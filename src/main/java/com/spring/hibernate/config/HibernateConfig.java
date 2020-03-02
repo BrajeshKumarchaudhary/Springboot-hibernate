@@ -2,6 +2,7 @@ package com.spring.hibernate.config;
 
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,10 +11,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableTransactionManagement
 public class HibernateConfig {
 	@Value("${db.driver}")
 	private String DRIVER;
@@ -68,5 +72,29 @@ public class HibernateConfig {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(sessionFactory().getObject());
 		return transactionManager;
-	}	
+	}
+	
+	
+	@Bean
+	  public EntityManagerFactory entityManagerFactory() {
+
+	    HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+	    vendorAdapter.setGenerateDdl(true);
+
+	    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+	    factory.setJpaVendorAdapter(vendorAdapter);
+	    factory.setDataSource(dataSource());
+	    factory.afterPropertiesSet();
+
+	    return factory.getObject();
+	  }
+
+	  @Bean
+	  public PlatformTransactionManager transactionManager1() {
+
+	    JpaTransactionManager txManager = new JpaTransactionManager();
+	    txManager.setEntityManagerFactory(entityManagerFactory());
+	    return txManager;
+	  }
+	
 }
